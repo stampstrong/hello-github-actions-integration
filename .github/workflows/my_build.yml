@@ -25,19 +25,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Source code formatter
+    - name: Lint with flake8
       run: |
-        flake8 .
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
         pytest
     - shell: bash
       env:
-        PASSWORD: ${{ secrets.PASSWORD }}
+        SUPER_SECRET: ${{ secrets.PASSWORD }}
       run: |
-        echo "$PASSWORD"
+        echo "$SUPER_SECRET"
     - name: Discord Notifier
       uses: fateyan/action-discord-notifier@v1.2.0
       with:
+        # A full discord webhook url
         webhook: https://discord.com/api/webhooks/882220403878137906/uroRgnc3sTGv5600d7Mkk6ejx1GZBTYQhAYj858JZZ3VNQprmQPfwNhp6k4u9czkbKb8
-        message-title: PEA ⚡️💕
+        message-title: อยากได้ Airpod Pro ใหม่
